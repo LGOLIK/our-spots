@@ -6,15 +6,26 @@ Our Spots is an application where a group can collectively monitor and keep trac
 
 ## Database Architecture (ERD)
 
-![](readmes/our_spots_erd.png)
+![](pics/our_spots_erd.png)
 
 
 ## Wireframes
 
+User landing page
+![](pics/all-restaurants.png)
+
+Add a new restaurant
+![](pics/new-restaurant.png)
+
+User's unvisited restaurants
+![](pics/unseen-restaurants-1.png)
+
+User's frequented restaurants
+![](pics/seen-restaurants.png)
 
 
 ## Routes
 
 The following routes will need to be built.
 
-![](readmes/routes.png)
+![](pics/routes.png)
