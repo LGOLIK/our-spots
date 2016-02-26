@@ -20,12 +20,16 @@ app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//check that home is up
+// check that home is up
 app.get('/', (req, res) => {
   res.send('<h1>Lets go out to eat!</h1>');
 });
 
+// render the register user page
+app.get('/register', (req, res) => res.render('register'));
 
+// render the login user page
+app.get('/login', (req, res) => res.render('login'));
 
 app.listen(process.env.PORT, function() {
   console.log(`Listening on port ${process.env.PORT}`);
