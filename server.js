@@ -20,6 +20,11 @@ app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+//check that home is up
+app.get('/', (req, res) => {
+  res.send('<h1>Lets go out to eat!</h1>');
+});
+
 
 
 app.listen(process.env.PORT, function() {
