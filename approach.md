@@ -12,15 +12,15 @@
 
 1. Init a new Express application
 1. Setup directory structure
-1. Setup user login
-1. Setup user DB
-1. Setup user login and register routes
+1. Setup DB
+1. Write a schema file, load db
 
 ## Step 3
 
-1. Write a schema file
+1. Setup user login
+1. Setup user login and register routes
 1. Seed db if needed
-1. Serve a placeholder root route
+1. Serve a placeholders for remaining root routes
 
 ## Step 4
 

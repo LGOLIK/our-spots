@@ -1,0 +1,29 @@
+{
+  "name": "our-spots",
+  "version": "0.0.0",
+  "description": "Restaurant Sharing app",
+  "main": "server.js",
+  "scripts": {
+    "start": "server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LGOLIK/our-spots.git"
+  },
+  "author": "LG",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/LGOLIK/our-spots/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "dotenv": "^2.0.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "method-override": "^2.3.5",
+    "morgan": "^1.7.0",
+    "path": "^0.12.7",
+    "pg": "^4.4.6"
+  }
+}
