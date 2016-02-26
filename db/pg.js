@@ -14,6 +14,36 @@ var config = {
   password: process.env.DB_PASS
 };
 
+function loginUser(req, res, next) {
+  var email = req.body.email;
+  var password = req.body.password;
+
+  // find user by email entered at log in
+  pg.connect(config, function(err, client, done) {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      res.status(500).json({ success: false, data: err});
+    }
+
+    var query = client.query("SELECT * FROM users WHERE email LIKE ($1);",
+      [email], function(err, result) {
+        done()
+        if(err) {
+          return console.error('error, running query', err);
+        }
+
+        if (result.rows.length == 0) {
+          res.status(204).json({success: false, data: 'no account matches that password'})
+        } else if (bcrypt.compareSync(password, result.rows[0].password)) {
+          res.rows = result.rows[0]
+          next()
+        }
+    });
+  });
+} // end of log in user
+
 function createSecure(first, last, email, password, callback) {
   bcrypt.genSalt(function(err, salt) {
     bcrypt.hash(password, salt, function(err, hash) {
@@ -45,3 +75,4 @@ function createUser(req, res, next) {
 } // end of create user function
 
 module.exports.createUser = createUser;
+module.exports.loginUser = loginUser;

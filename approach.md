@@ -20,7 +20,7 @@
 1. Setup user login
 1. Setup user login and register routes
 1. Seed db if needed
-1. Serve a placeholders for remaining root routes
+1. Setup placeholders for remaining root routes
 
 ## Step 4
 

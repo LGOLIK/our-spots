@@ -7,12 +7,29 @@ var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var pg = require('pg');
+var connectionString = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+var session = require('express-session');
+var pgSession = require('connect-pg-simple')(session);
+
 
 var userRoutes = require( path.join(__dirname, '/routes/users'));
 
 var app = express();
 
 app.use(morgan('dev'));
+
+// user session login info
+app.use(session({
+  store: new pgSession({
+    pg : pg,
+    conString : connectionString,
+    tableName : 'session'
+  }),
+  secret: 'sooosecrett', // something we maybe want to save with dotenv *hint hint*
+  resave: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}))
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -25,7 +42,9 @@ app.set('view engine', 'ejs');
 app.use('/users', userRoutes)
 
 // check that home is up
-app.get('/', (req, res) => res.render('home'));
+app.get('/', (req, res) => {
+  res.render('home', { user: req.session.user })
+})
 
 
 
