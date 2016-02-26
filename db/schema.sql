@@ -1,4 +1,4 @@
-DROP TABLE if EXISTS restaurants, users;
+DROP TABLE if EXISTS restaurants, users, rests_users_join CASCADE;
 
 CREATE TABLE restaurants (
   rest_id SERIAL PRIMARY KEY UNIQUE,
@@ -24,7 +24,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE rests_users_join (
-  rest_id  integer REFERENCES restaurants,
+  rest_id integer REFERENCES restaurants,
   user_id integer REFERENCES users,
   visited boolean
 );

@@ -27,11 +27,7 @@ app.use('/users', userRoutes)
 // check that home is up
 app.get('/', (req, res) => res.render('home'));
 
-// render the register user page
-app.get('/register', (req, res) => res.render('register'));
 
-// render the login user page
-app.get('/login', (req, res) => res.render('login'));
 
 app.listen(process.env.PORT, function() {
   console.log(`Listening on port ${process.env.PORT}`);
