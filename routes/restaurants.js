@@ -2,15 +2,19 @@
 
 var express = require('express');
 var rests = express.Router();
-var users = require('./users')
+var users = require('./users');
+var db = require('../db/pg');
 
 var notImplemented = (req, res) => {
   res.send(req.method + ' is not implemented');
 };
 
 // restaurants landing page after log in
-rests.get('/', (req, res) => {
-  res.render('pages/restaurants', { user: req.session.user });
+rests.get('/', db.showRestaurants, (req, res) => {
+  res.render('pages/restaurants', {
+    user: req.session.user,
+    data: res.rows
+  });
 })
 
 // add a new restaurant

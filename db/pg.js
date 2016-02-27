@@ -1,18 +1,38 @@
 'use strict';
 
 var pg = require('pg');
+var express = require('express');
 var bcrypt = require('bcrypt');
 // there are a lot of options with encrypting passwords. this will set for 10
 var salt = bcrypt.genSaltSync(10);
 var session = require('express-session');
+var config = "postgres://" + process.env.DB_USER + ":" +
+  process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
 
-var config = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS
-};
+// function to show all restaurants
+function showRestaurants(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+
+    var query = client.query(`SELECT r.name, r.neighborhood, r.cuisine, r.website
+      FROM restaurants as r
+      LEFT JOIN rests_users_join AS j
+      ON r.rest_id = j.rest_id
+      WHERE j.user_id != 3 OR j.user_id IS NULL
+      ORDER BY cuisine;`, function(err, results) {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        res.rows = results.rows;
+        next();
+      }); // end of query
+  }); // end of pg connect
+};  // end of show restaurants
 
 function loginUser(req, res, next) {
   var email = req.body.email;
@@ -76,3 +96,4 @@ function createUser(req, res, next) {
 
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
+module.exports.showRestaurants = showRestaurants;

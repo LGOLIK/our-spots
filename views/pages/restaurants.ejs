@@ -7,7 +7,13 @@
   <body>
     <div class="container">
       <% if (user) {%>
-        <h3>Welcome <%= user.first %></h3>
+        <h1>Check out these spots, user.first!</h1>
+        <h3>Look through the places people have added and check if you want to go!</h3>
+        <table>
+          <% data.forEach(restaurant => { %>
+            <tr> <%- include _show %> </tr>
+          <% }); %>
+        </table>
       <% } %>
     </div>
   </body>
