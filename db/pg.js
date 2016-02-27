@@ -17,12 +17,12 @@ function showRestaurants(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-
+    // render the list of restaurants that the user hasn't already tagged
     var query = client.query(`SELECT r.name, r.neighborhood, r.cuisine, r.website
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
-      WHERE j.user_id != 3 OR j.user_id IS NULL
+      WHERE j.user_id != ${req.session.user.user_id} OR j.user_id IS NULL
       ORDER BY cuisine;`, function(err, results) {
         done();
         if (err) {

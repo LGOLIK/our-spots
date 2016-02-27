@@ -7,11 +7,21 @@
   <body>
     <div class="container">
       <% if (user) {%>
-        <h1>Check out these spots, user.first!</h1>
-        <h3>Look through the places people have added and check if you want to go!</h3>
+        <h2>Check out these spots!</h2>
+        <h4>Look through the places people have added and check if you want to go!</h4>
+        <form class="" action="#" method="post">
+          <button type="button" name="button">Add to my list!</button>
+        </form>
         <table>
+          <tr>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Neighborhood</th>
+            <th>Website</th>
+            <th>Add</th>
+          </tr>
           <% data.forEach(restaurant => { %>
-            <tr> <%- include _show %> </tr>
+            <%- include _show%>
           <% }); %>
         </table>
       <% } %>
