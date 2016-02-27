@@ -18,7 +18,7 @@ function showRestaurants(req, res, next) {
       res.status(500).json({success: false, data: err});
     }
     // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT r.name, r.neighborhood, r.cuisine, r.website
+    var query = client.query(`SELECT r.*
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
@@ -42,7 +42,7 @@ function showRestsUnseen(req, res, next) {
       res.status(500).json({success: false, data: err});
     }
     // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT r.name, r.neighborhood, r.cuisine, r.website
+    var query = client.query(`SELECT *
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
@@ -57,6 +57,28 @@ function showRestsUnseen(req, res, next) {
       }); // end of query
   }); // end of pg connect
 }
+
+// function to add restaurant to user list
+function addUserRestaurant(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // insert the rest id from the link, the user_id from the session, and FALSE for visited into the join table
+    client.query('INSERT INTO rests_users_join VALUES ($1, $2, $3)', [req.params.id, req.session.user.user_id, 'FALSE'], (err, results) => {
+      done();
+
+      if (err) {
+        console.error('Error with query', err);
+      }
+
+      res.rows = results.rows;
+      next();
+    }); // end of query
+  }); // end of pg connect
+} // end of add user restaurants
 
 function loginUser(req, res, next) {
   var email = req.body.email;
@@ -122,3 +144,4 @@ module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
 module.exports.showRestaurants = showRestaurants;
 module.exports.showRestsUnseen = showRestsUnseen;
+module.exports.addUserRestaurant = addUserRestaurant;

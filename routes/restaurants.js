@@ -15,6 +15,7 @@ rests.get('/', db.showRestaurants, (req, res) => {
     user: req.session.user,
     data: res.rows
   });
+  console.log(res.rows);
 })
 
 // add a new restaurant
@@ -36,13 +37,11 @@ rests.get('/my/unseen', db.showRestsUnseen, (req, res) => {
   })
 })
 
-// add restaurants to user view
-rests.post('/my/unseen', notImplemented);
-
-
 
 // view a restaurant
 rests.get('/:id', notImplemented)
 
+// add restaurants to user view
+rests.post('/:id', notImplemented);
 
 module.exports = rests;
