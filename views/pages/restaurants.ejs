@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include ../partials/head %>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <%- include ../partials/nav %>
+      </nav>
+      <% if (user) {%>
+        <h2>Check out these spots!</h2>
+        <h4>Look through the places people have added and check if you want to go!</h4>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Neighborhood</th>
+            <th>Website</th>
+          </tr>
+          <% data.forEach(restaurant => { %>
+            <tr>
+              <%- include _show %>
+              <td>
+                <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
+                <label for="submit"></label>
+                <button id="submit" type="submit">Add to my list</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </table>
+      <% } %>
+    </div>
+  </body>
+</html>

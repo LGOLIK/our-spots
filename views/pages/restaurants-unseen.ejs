@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include ../partials/head %>
+  </head>
+  <body>
+    <nav>
+      <%- include ../partials/nav %>
+    </nav>
+    <% if (user) {%>
+      <h2>New Spots to Go To!</h2>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Cuisine</th>
+          <th>Neighborhood</th>
+          <th>Website</th>
+        </tr>
+        <% data.forEach(restaurant => { %>
+          <tr>
+            <%- include _show %>
+            <td><form class="" action="restaurants/seen?_method=PUT">
+              <button>I went!</button>
+            </form></td>
+            <td><form class="" action="restaurants/unseen">
+              <button>Remove</button>
+            </form></td>
+          </tr>
+        <% }); %>
+      </table>
+    <% } %>
+  </body>
+</html>

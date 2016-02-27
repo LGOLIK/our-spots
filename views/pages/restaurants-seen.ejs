@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include ../partials/head %>
+  </head>
+  <body>
+    <nav>
+      <%- include ../partials/nav %>
+    </nav>
+    <% if (user) {%>
+      <h3><%= user.first %>'s places visited</h3>
+    <% } %>
+  </body>
+</html>
