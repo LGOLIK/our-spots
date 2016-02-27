@@ -41,7 +41,9 @@ rests.get('/my/unseen', db.showRestsUnseen, (req, res) => {
 // view a restaurant
 rests.get('/:id', notImplemented)
 
-// add restaurants to user view
-rests.post('/:id', notImplemented);
+// add restaurants to user view, and redirect back to the restaurants view
+rests.post('/:id', db.addUserRestaurant, (req, res) => {
+  res.redirect('./');
+})
 
 module.exports = rests;

@@ -42,7 +42,7 @@ function showRestsUnseen(req, res, next) {
       res.status(500).json({success: false, data: err});
     }
     // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT *
+    var query = client.query(`SELECT r.*
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
