@@ -29,9 +29,17 @@ rests.get('/my/seen', (req, res) => {
 })
 
 // user open restaurants
-rests.get('/my/unseen', (req, res) => {
-  res.render('pages/restaurants-unseen', { user: req.session.user })
+rests.get('/my/unseen', db.showRestsUnseen, (req, res) => {
+  res.render('pages/restaurants-unseen', {
+    user: req.session.user,
+    data: res.rows
+  })
 })
+
+// add restaurants to user view
+rests.post('/my/unseen', notImplemented);
+
+
 
 // view a restaurant
 rests.get('/:id', notImplemented)
