@@ -1,4 +1,4 @@
-DROP TABLE if EXISTS restaurants, users, rests_users_join CASCADE;
+DROP TABLE if EXISTS restaurants, rests_users_join CASCADE;
 
 CREATE TABLE restaurants (
   rest_id SERIAL PRIMARY KEY UNIQUE,
@@ -11,16 +11,6 @@ CREATE TABLE restaurants (
   cuisine VARCHAR(255),
   website VARCHAR(255),
   yelp VARCHAR(255)
-);
-
-CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY UNIQUE,
-  first VARCHAR(255),
-  last VARCHAR(255),
-  city VARCHAR(255),
-  state CHAR(2),
-  email VARCHAR(255),
-  password VARCHAR(255)
 );
 
 CREATE TABLE rests_users_join (

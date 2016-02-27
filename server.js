@@ -8,7 +8,8 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var pg = require('pg');
-var connectionString = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+var connectionString = "postgres://" + process.env.DB_USER + ":" +
+  process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
 var session = require('express-session');
 var pgSession = require('connect-pg-simple')(session);
 
@@ -36,7 +37,7 @@ app.use(session({
     conString : connectionString,
     tableName : 'session'
   }),
-  secret: 'sooosecrett', // something we maybe want to save with dotenv *hint hint*
+  secret: process.env.SECRET,
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
@@ -44,15 +45,14 @@ app.use(session({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use('/users', userRoutes);
-app.use('/restaurants', restaurantRoutes);
-
 // home route - log in screen
 app.get('/', (req, res) => {
   res.render('pages/home')
 })
 
-
+// routes
+app.use('/users', userRoutes);
+app.use('/restaurants', restaurantRoutes);
 
 app.listen(process.env.PORT, function() {
   console.log(`Listening on port ${process.env.PORT}`);
