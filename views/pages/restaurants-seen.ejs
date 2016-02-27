@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title></title>
+    <%- include ../partials/head %>
   </head>
   <body>
+    <nav>
+      <%- include ../partials/nav %>
+    </nav>
     <% if (user) {%>
       <h3><%= user.first %>'s places visited</h3>
     <% } %>

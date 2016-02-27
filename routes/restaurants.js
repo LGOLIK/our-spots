@@ -23,4 +23,18 @@ rests.post('/', notImplemented);
 // new restaurant form
 rests.get('/new', notImplemented);
 
+// users restaurants seen
+rests.get('/my/seen', (req, res) => {
+  res.render('pages/restaurants-seen', { user: req.session.user })
+})
+
+// user open restaurants
+rests.get('/my/unseen', (req, res) => {
+  res.render('pages/restaurants-unseen', { user: req.session.user })
+})
+
+// view a restaurant
+rests.get('/:id', notImplemented)
+
+
 module.exports = rests;
