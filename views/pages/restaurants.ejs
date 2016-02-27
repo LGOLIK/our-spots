@@ -11,21 +11,21 @@
       <% if (user) {%>
         <h2>Check out these spots!</h2>
         <h4>Look through the places people have added and check if you want to go!</h4>
-        <form class="" action="/restaurants/my/unseen" method="post">
-          <button type="button" name="button">Add to my list!</button>
-        </form>
         <table>
           <tr>
             <th>Name</th>
             <th>Cuisine</th>
             <th>Neighborhood</th>
             <th>Website</th>
-            <th>Add</th>
           </tr>
           <% data.forEach(restaurant => { %>
             <tr>
               <%- include _show %>
-              <td><label><input type="checkbox" id="cbox" value="checkbox"></td>
+              <td>
+                <form action="" method="POST">
+                <input type="submit" value="Add to my list">
+                </form>
+              </td>
             </tr>
           <% }); %>
         </table>
