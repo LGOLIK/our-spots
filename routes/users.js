@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var users = express.Router();
 var bodyParser = require('body-parser');
@@ -9,10 +11,10 @@ users.route('/')
   })
 
 // render the register user page
-users.get('/new', (req, res) => res.render('register'));
+users.get('/new', (req, res) => res.render('pages/register'));
 
 // render the login user page
-users.get('/login', (req, res) => res.render('login'));
+users.get('/login', (req, res) => res.render('pages/login'));
 
 // log the user in
 users.post('/login', db.loginUser, (req, res) => {
@@ -30,12 +32,12 @@ users.post('/login', db.loginUser, (req, res) => {
 
 // users restaurants seen
 users.get('/:id/restaurants/seen', (req, res) => {
-  res.render('user-restaurants-seen', { user: req.session.user })
+  res.render('pages/user-restaurants-seen', { user: req.session.user })
 })
 
 // user open restaurants
 users.get('/:id/restaurants/unseen', (req, res) => {
-  res.render('user-restaurants-unseen', { user: req.session.user })
+  res.render('pages/user-restaurants-unseen', { user: req.session.user })
 })
 
 module.exports = users;
