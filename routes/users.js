@@ -30,14 +30,11 @@ users.post('/login', db.loginUser, (req, res) => {
     })
 })
 
-// users restaurants seen
-users.get('/:id/restaurants/seen', (req, res) => {
-  res.render('pages/user-restaurants-seen', { user: req.session.user })
-})
-
-// user open restaurants
-users.get('/:id/restaurants/unseen', (req, res) => {
-  res.render('pages/user-restaurants-unseen', { user: req.session.user })
+// logout the user
+users.delete('/logout', function(req, res) {
+  req.session.destroy(function(err){
+    return res.redirect('/');
+  })
 })
 
 module.exports = users;

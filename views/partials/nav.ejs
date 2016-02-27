@@ -7,5 +7,9 @@
 </ul>
 <ul>
   <li>Hello, <%= user.first %>!</li>
-  <li><a href="/">Logout</a></li>
+  <li>
+    <form method="post" action="users/logout?_method=DELETE">
+      <button>logout</button>
+    </form>
+  </li>
 </ul>
