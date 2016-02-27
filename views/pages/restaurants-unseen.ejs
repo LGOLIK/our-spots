@@ -15,10 +15,17 @@
           <th>Cuisine</th>
           <th>Neighborhood</th>
           <th>Website</th>
-          <th>Add</th>
         </tr>
         <% data.forEach(restaurant => { %>
-          <%- include _show %>
+          <tr>
+            <%- include _show %>
+            <td><form class="" action="restaurants/seen?_method=PUT">
+              <button>I went!</button>
+            </form></td>
+            <td><form class="" action="restaurants/unseen">
+              <button>Remove</button>
+            </form></td>
+          </tr>
         <% }); %>
       </table>
     <% } %>

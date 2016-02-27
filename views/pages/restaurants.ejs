@@ -23,7 +23,10 @@
             <th>Add</th>
           </tr>
           <% data.forEach(restaurant => { %>
-            <%- include _show %>
+            <tr>
+              <%- include _show %>
+              <td><label><input type="checkbox" id="cbox" value="checkbox"></td>
+            </tr>
           <% }); %>
         </table>
       <% } %>
