@@ -19,7 +19,7 @@
             <th>Website</th>
           </tr>
           <% restaurants.forEach(restaurant => { %>
-            <% var userRestArr = userRests.rests; %>
+            <% var userRestArr = userRests.rests.sort(); %>
             <% if (!userRestArr.indexOf(restaurant.rest_id+1)) { %>
               <tr>
                 <%- include _show %>
