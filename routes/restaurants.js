@@ -46,4 +46,8 @@ rests.post('/:id', db.addUserRestaurant, (req, res) => {
   res.redirect('./');
 })
 
+// update a user's restaurant status
+rests.put('/:id', notImplemented)
+
+
 module.exports = rests;
