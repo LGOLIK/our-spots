@@ -9,16 +9,19 @@ var notImplemented = (req, res) => {
   res.send(req.method + ' is not implemented');
 };
 
-// restaurants landing page after log in
-rests.get('/', db.showRestaurants, (req, res) => {
+/* restaurants landing page after log in
+ this page renders with both the full list of restaurants,
+ as well as an array of restaurants set to the user and
+ shows the restaurants not in the user's list */
+rests.get('/', db.showRestaurants, db.getUserRestaurants, (req, res) => {
   res.render('pages/restaurants', {
     user: req.session.user,
-    data: res.rows
+    restaurants: res.restaurants,
+    userRests: res.userRestaurants[0]
   });
-  console.log(res.rows);
 })
 
-// add a new restaurant
+// add a new restaurant to the communal list
 rests.post('/', notImplemented);
 
 // new restaurant form
@@ -45,5 +48,14 @@ rests.get('/:id', notImplemented)
 rests.post('/:id', db.addUserRestaurant, (req, res) => {
   res.redirect('./');
 })
+
+// update a user's restaurant status
+rests.put('/:id', db.updateUserRest, (req, res) => {
+  res.status(303).redirect('./my/unseen');
+})
+
+// remove a restaurant from the user's list
+rests.delete('/:id', notImplemented)
+
 
 module.exports = rests;

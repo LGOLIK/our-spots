@@ -19,11 +19,13 @@
         <% data.forEach(restaurant => { %>
           <tr>
             <%- include _show %>
-            <td><form class="" action="restaurants/seen?_method=PUT">
-              <button>I went!</button>
+            <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=PUT" method="POST">
+              <label for="submit"></label>
+              <button id="submit" type="submit">I went!</button>
             </form></td>
-            <td><form class="" action="restaurants/unseen">
-              <button>Remove</button>
+            <td><form class="" action="restaurants/<%= restaurant.rest_id %>?_method=DELETE" method="POST">
+              <label for="submit"></label>
+              <button id="submit" type="submit">Remove</button>
             </form></td>
           </tr>
         <% }); %>
