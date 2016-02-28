@@ -54,7 +54,29 @@ function getUserRestaurants(req, res, next) {
   }); // end of pg connect
 };  // end of show restaurants
 
+// function to add restaurant to user list
+function addUserRestaurant(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // insert the rest id from the link, the user_id from the session, and FALSE for visited into the join table
+    client.query('INSERT INTO rests_users_join VALUES ($1, $2, $3)', [req.params.id, req.session.user.user_id, 'FALSE'], (err, results) => {
+      done();
 
+      if (err) {
+        console.error('Error with query', err);
+      }
+
+      res.rows = results.rows;
+      next();
+    }); // end of query
+  }); // end of pg connect
+} // end of add user restaurants
+
+// function to show the user's unfrequented restaurants
 function showRestsUnseen(req, res, next) {
   pg.connect(config, (err, client, done) => {
     if (err) {
@@ -77,29 +99,28 @@ function showRestsUnseen(req, res, next) {
         next();
       }); // end of query
   }); // end of pg connect
-}
+} // end of showRestsUnseen
 
-// function to add restaurant to user list
-function addUserRestaurant(req, res, next) {
-  pg.connect(config, (err, client, done) => {
+// function to update a user restaurant from unseen to seen
+function updateUserRest(req, res, next) {
+  pg.connect(config, function(err, client, done) {
     if (err) {
       done();
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // insert the rest id from the link, the user_id from the session, and FALSE for visited into the join table
-    client.query('INSERT INTO rests_users_join VALUES ($1, $2, $3)', [req.params.id, req.session.user.user_id, 'FALSE'], (err, results) => {
-      done();
-
-      if (err) {
-        console.error('Error with query', err);
-      }
-
-      res.rows = results.rows;
-      next();
-    }); // end of query
+    // render the list of restaurants that the user hasn't already tagged
+    var query = client.query(`UPDATE rests_users_join
+      SET visited=TRUE
+      WHERE rest_id=$1 AND user_id=$2;`, [req.params.id, req.session.user.user_id], (err, results) => {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        next();
+      }); // end of query
   }); // end of pg connect
-} // end of add user restaurants
+} // end of updateUserRest
 
 function loginUser(req, res, next) {
   var email = req.body.email;
@@ -128,7 +149,7 @@ function loginUser(req, res, next) {
           next()
         }
     });
-  });
+  }); // end of pg connect
 } // end of log in user
 
 function createSecure(first, last, email, password, callback) {
@@ -168,3 +189,4 @@ module.exports.showRestaurants = showRestaurants;
 module.exports.getUserRestaurants = getUserRestaurants;
 module.exports.showRestsUnseen = showRestsUnseen;
 module.exports.addUserRestaurant = addUserRestaurant;
+module.exports.updateUserRest = updateUserRest;
