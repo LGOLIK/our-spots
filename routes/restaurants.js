@@ -10,12 +10,12 @@ var notImplemented = (req, res) => {
 };
 
 // restaurants landing page after log in
-rests.get('/', db.showRestaurants, (req, res) => {
+rests.get('/', db.showRestaurants, db.getUserRestaurants, (req, res) => {
   res.render('pages/restaurants', {
     user: req.session.user,
-    data: res.rows
+    restaurants: res.restaurants,
+    userRests: res.userRestaurants[0]
   });
-  console.log(res.rows);
 })
 
 // add a new restaurant

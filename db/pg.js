@@ -18,21 +18,42 @@ function showRestaurants(req, res, next) {
       res.status(500).json({success: false, data: err});
     }
     // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT r.*
-      FROM restaurants as r
-      LEFT JOIN rests_users_join AS j
-      ON r.rest_id = j.rest_id
-      WHERE j.user_id != ${req.session.user.user_id} OR j.user_id IS NULL
+    var query = client.query(`SELECT *
+      FROM restaurants
       ORDER BY cuisine;`, function(err, results) {
         done();
         if (err) {
           return console.error('Error with query', err);
         }
-        res.rows = results.rows;
+        res.restaurants = results.rows;
         next();
       }); // end of query
   }); // end of pg connect
 };  // end of show restaurants
+
+// get user restaurants array
+function getUserRestaurants(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // render the list of restaurants that the user hasn't already tagged
+    var query = client.query(`SELECT j.user_id, array_agg(j.rest_id) as rests
+      FROM rests_users_join AS j
+      WHERE j.user_id = ${req.session.user.user_id}
+      GROUP BY j.user_id;`, (err, results) => {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        res.userRestaurants = results.rows;
+        next();
+      }); // end of query
+  }); // end of pg connect
+};  // end of show restaurants
+
 
 function showRestsUnseen(req, res, next) {
   pg.connect(config, (err, client, done) => {
@@ -140,8 +161,10 @@ function createUser(req, res, next) {
   }
 } // end of create user function
 
+// export it out
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
 module.exports.showRestaurants = showRestaurants;
+module.exports.getUserRestaurants = getUserRestaurants;
 module.exports.showRestsUnseen = showRestsUnseen;
 module.exports.addUserRestaurant = addUserRestaurant;

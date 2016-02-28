@@ -18,16 +18,19 @@
             <th>Neighborhood</th>
             <th>Website</th>
           </tr>
-          <% data.forEach(restaurant => { %>
-            <tr>
-              <%- include _show %>
-              <td>
-                <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
-                <label for="submit"></label>
-                <button id="submit" type="submit">Add to my list</button>
-                </form>
-              </td>
-            </tr>
+          <% restaurants.forEach(restaurant => { %>
+            <% var userRestArr = userRests.rests; %>
+            <% if (!userRestArr.indexOf(restaurant.rest_id+1)) { %>
+              <tr>
+                <%- include _show %>
+                <td>
+                  <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
+                  <label for="submit"></label>
+                  <button id="submit" type="submit">Add to my list</button>
+                  </form>
+                </td>
+              </tr>
+            <% }; %>
           <% }); %>
         </table>
       <% } %>
