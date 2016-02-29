@@ -55,31 +55,6 @@ function addUserRestaurant(req, res, next) {
   }); // end of pg connect
 } // end of add user restaurants
 
-// function to show the user's unfrequented restaurants
-function showRestsUnseen(req, res, next) {
-  pg.connect(config, (err, client, done) => {
-    if (err) {
-      done();
-      console.log(err);
-      res.status(500).json({success: false, data: err});
-    }
-    // show the list of restaurants for the user where the visited attribute is false
-    var query = client.query(`SELECT r.*
-      FROM restaurants as r
-      LEFT JOIN rests_users_join AS j
-      ON r.rest_id = j.rest_id
-      WHERE j.user_id = $1 AND j.visited = FALSE
-      ORDER BY cuisine;`, [req.session.user.user_id], function(err, results) {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.rows = results.rows;
-        next();
-      }); // end of query
-  }); // end of pg connect
-} // end of showRestsUnseen
-
 // function to update a user restaurant from unseen to seen
 function updateUserRest(req, res, next) {
   pg.connect(config, function(err, client, done) {
@@ -120,6 +95,36 @@ function deleteUserRest(req, res, next) {
       }); // end of query
   }); // end of pg connect
 } // end of deleteUserRest
+
+// function to show the user's restaurants
+function showUserRests(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // show the list of restaurants for the user where the visited attribute is false
+    var query = client.query(`SELECT r.*, j.visited
+      FROM restaurants as r
+      LEFT JOIN rests_users_join AS j
+      ON r.rest_id = j.rest_id
+      WHERE j.user_id = $1 AND j.visited = FALSE
+      ORDER BY cuisine;`, [req.session.user.user_id], function(err, results) {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        res.rows = results.rows;
+        next();
+      }); // end of query
+  }); // end of pg connect
+} // end of showRestsUnseen
+
+// function to show the restaurants a user has been to
+function showRestsSeen(req, res, next) {
+
+}
 
 function loginUser(req, res, next) {
   var email = req.body.email;
@@ -185,7 +190,7 @@ function createUser(req, res, next) {
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
 module.exports.showRestaurants = showRestaurants;
-module.exports.showRestsUnseen = showRestsUnseen;
+module.exports.showUserRests = showUserRests;
 module.exports.addUserRestaurant = addUserRestaurant;
 module.exports.updateUserRest = updateUserRest;
 module.exports.deleteUserRest = deleteUserRest;
