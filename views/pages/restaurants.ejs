@@ -5,32 +5,42 @@
   </head>
   <body>
     <div class="container">
-      <nav>
-        <%- include ../partials/nav %>
-      </nav>
+      <%- include ../partials/nav %>
       <% if (user) {%>
-        <h2>Check out these spots!</h2>
-        <h4>Look through the places people have added and check if you want to go!</h4>
-        <table>
-          <tr>
-            <th>Name</th>
-            <th>Cuisine</th>
-            <th>Neighborhood</th>
-            <th>Website</th>
-          </tr>
-          <% restaurants.forEach(restaurant => { %>
-            <tr>
-              <%- include _show %>
-              <td>
-                <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
-                <label for="submit"></label>
-                <button id="submit" type="submit">Add to my list</button>
-                </form>
-              </td>
-            </tr>
-          <% }); %>
-        </table>
+        <div class="jumbotron">
+          <h2>Check out these spots!</h2>
+          <p>Look through the places people have added and, if you're interested, add them to your personal checklist</p>
+        </div>
+        <div class="row">
+          <div class="col-md-10">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Cuisine</th>
+                  <th>Neighborhood</th>
+                  <th>Website</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% restaurants.forEach(restaurant => { %>
+                  <tr>
+                    <%- include _show %>
+                    <td>
+                      <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
+                      <label for="submit"></label>
+                      <button class="btn btn-sm btn-default" id="submit" type="submit">Add to my list</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
       <% } %>
     </div>
+    <%- include ../partials/footer %>
   </body>
 </html>

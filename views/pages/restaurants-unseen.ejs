@@ -4,34 +4,48 @@
     <%- include ../partials/head %>
   </head>
   <body>
-    <nav>
+    <div class="container">
       <%- include ../partials/nav %>
-    </nav>
-    <% if (user) {%>
-      <h2>New Spots to Go To!</h2>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Cuisine</th>
-          <th>Neighborhood</th>
-          <th>Website</th>
-        </tr>
-        <% data.forEach(restaurant => { %>
-          <% if (!restaurant.visited) {  %>
-            <tr>
-              <%- include _show %>
-              <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=PUT" method="POST">
-                <label for="submit"></label>
-                <button id="submit" type="submit">I went!</button>
-              </form></td>
-              <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=DELETE" method="POST">
-                <label for="submit"></label>
-                <button id="submit" type="submit">Remove</button>
-              </form></td>
-            </tr>
-          <% } %>
-        <% }); %>
-      </table>
-    <% } %>
+      <% if (user) {%>
+        <div class="jumbotron">
+          <h2>New Spots to Go To!</h2>
+          <p>Keep track of my restaurant wish list</p>
+        </div>
+        <div class="row">
+          <div class="col-md-10">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Cuisine</th>
+                  <th>Neighborhood</th>
+                  <th>Website</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% data.forEach(restaurant => { %>
+                  <% if (!restaurant.visited) {  %>
+                    <tr>
+                      <%- include _show %>
+                      <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=PUT" method="POST">
+                        <label for="submit"></label>
+                        <button class="btn btn-sm btn-default" id="submit" type="submit">I went!</button>
+                      </form></td>
+                      <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=DELETE" method="POST">
+                        <label for="submit"></label>
+                        <button class="btn btn-sm btn-default" id="submit" type="submit">Remove</button>
+                      </form></td>
+                    </tr>
+                  <% } %>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% } %>
+    </div>
+    <%- include ../partials/footer %>
   </body>
 </html>
