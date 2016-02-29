@@ -17,7 +17,7 @@ function showRestaurants(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
+    // render the list of restaurants
     var query = client.query(`SELECT *
       FROM restaurants
       ORDER BY cuisine;`, function(err, results) {
@@ -39,11 +39,11 @@ function getUserRestaurants(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
+    // returns a table of user_id and an array of rest_id's that they each are associated with
     var query = client.query(`SELECT j.user_id, array_agg(j.rest_id) as rests
       FROM rests_users_join AS j
-      WHERE j.user_id = ${req.session.user.user_id}
-      GROUP BY j.user_id;`, (err, results) => {
+      WHERE j.user_id = $1
+      GROUP BY j.user_id;`, [req.session.user.user_id], (err, results) => {
         done();
         if (err) {
           return console.error('Error with query', err);
@@ -84,13 +84,13 @@ function showRestsUnseen(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
+    // show the list of restaurants for the user where the visited attribute is false
     var query = client.query(`SELECT r.*
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
-      WHERE j.user_id = ${req.session.user.user_id} AND j.visited = FALSE
-      ORDER BY cuisine;`, function(err, results) {
+      WHERE j.user_id = $1 AND j.visited = FALSE
+      ORDER BY cuisine;`, [req.session.user.user_id], function(err, results) {
         done();
         if (err) {
           return console.error('Error with query', err);
@@ -109,7 +109,7 @@ function updateUserRest(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
+    // change the visited status on the restaurant to TRUE
     var query = client.query(`UPDATE rests_users_join
       SET visited=TRUE
       WHERE rest_id=$1 AND user_id=$2;`, [req.params.id, req.session.user.user_id], (err, results) => {
@@ -122,11 +122,30 @@ function updateUserRest(req, res, next) {
   }); // end of pg connect
 } // end of updateUserRest
 
+// function to remove a restaurant from the user's list
+function deleteUserRest(req, res, next) {
+  pg.connect(config, function(err, client, done) {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // remove the specified user-restaurant combination from the join table
+    var query = client.query(`DELETE from rests_users_join
+      WHERE rest_id=$1 AND user_id=$2;`, [req.params.id, req.session.user.user_id], (err, results) => {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        next();
+      }); // end of query
+  }); // end of pg connect
+} // end of deleteUserRest
+
 function loginUser(req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
 
-  // find user by email entered at log in
   pg.connect(config, function(err, client, done) {
     // Handle connection errors
     if(err) {
@@ -135,7 +154,8 @@ function loginUser(req, res, next) {
       res.status(500).json({ success: false, data: err});
     }
 
-    var query = client.query("SELECT * FROM users WHERE email LIKE ($1);",
+    // find user by email entered at log in
+    var query = client.query('SELECT * FROM users WHERE email LIKE ($1);',
       [email], function(err, result) {
         done()
         if(err) {
@@ -190,3 +210,4 @@ module.exports.getUserRestaurants = getUserRestaurants;
 module.exports.showRestsUnseen = showRestsUnseen;
 module.exports.addUserRestaurant = addUserRestaurant;
 module.exports.updateUserRest = updateUserRest;
+module.exports.deleteUserRest = deleteUserRest;

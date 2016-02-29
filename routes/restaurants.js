@@ -19,6 +19,9 @@ rests.get('/', db.showRestaurants, db.getUserRestaurants, (req, res) => {
     restaurants: res.restaurants,
     userRests: res.userRestaurants[0]
   });
+  console.log('user: ' + req.session.user.user_id);
+  console.log('restaurants: ' + res.restaurants[0].name);
+  console.log('user restaurants: ');
 })
 
 // add a new restaurant to the communal list
@@ -55,7 +58,9 @@ rests.put('/:id', db.updateUserRest, (req, res) => {
 })
 
 // remove a restaurant from the user's list
-rests.delete('/:id', notImplemented)
+rests.delete('/:id', db.deleteUserRest, (req, res) => {
+  res.status(303).redirect('./my/unseen');
+})
 
 
 module.exports = rests;
