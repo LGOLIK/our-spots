@@ -30,6 +30,11 @@ app.use(bodyParser.json());
 
 app.use(methodOverride('_method'));
 
+// set views and public path
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, './public/') ) );
+
 // user session login info
 app.use(session({
   store: new pgSession({
@@ -41,9 +46,6 @@ app.use(session({
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 // home route - log in screen
 app.get('/', (req, res) => {
