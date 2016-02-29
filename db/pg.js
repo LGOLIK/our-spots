@@ -11,11 +11,6 @@ var session = require('express-session');
 
 // config path
 var config = process.env.DATABASE_URL;
-// if (process.env.NODE_ENV === 'production') {
-//   var config = process.env.DATABASE_URL;
-// } else {
-//   var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
-// }
 
 // function to show all restaurants
 function showRestaurants(req, res, next) {
