@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotenv').config();
+var dotenv = require('dotenv');
 
 var path = require('path');
 var express = require('express');

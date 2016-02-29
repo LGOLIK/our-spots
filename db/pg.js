@@ -1,5 +1,6 @@
 'use strict';
 
+var dotenv = require('dotenv')
 require('dotenv').config();
 
 var pg = require('pg');
