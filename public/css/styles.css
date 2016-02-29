@@ -6,9 +6,12 @@ body {
     background-position: center;
 }
 
+#login {
+  color: #C0C0C0
+}
+
 .jumbotron {
   opacity: 0.9;
-  background-color: 8B0000;
 }
 
 .login {
