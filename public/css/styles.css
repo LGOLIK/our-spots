@@ -1,0 +1,39 @@
+body {
+    padding-top: 70px;
+    padding-bottom: 30px;
+    background-image: url(../images/login-rest.jpeg);
+    background-size: cover;
+    background-position: center;
+}
+
+.jumbotron {
+  opacity: 0.9;
+  background-color: 8B0000;
+}
+
+.login {
+  width: 300px;
+}
+
+.form-signin-heading {
+  color: #8B0000;
+}
+
+thead {
+  color: #C0C0C0;
+}
+
+.rest-list {
+  color: #C0C0C0;
+}
+
+.rest-list a {
+  color: #C0C0C0;
+}
+
+.table {
+  background: rgba(0, 0, 0, 0.5);
+}
+a:hover{
+  color: #FF1493;
+}
