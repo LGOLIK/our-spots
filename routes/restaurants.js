@@ -13,11 +13,10 @@ var notImplemented = (req, res) => {
  this page renders with both the full list of restaurants,
  as well as an array of restaurants set to the user and
  shows the restaurants not in the user's list */
-rests.get('/', db.showRestaurants, db.getUserRestaurants, (req, res) => {
+rests.get('/', db.showRestaurants, (req, res) => {
   res.render('pages/restaurants', {
     user: req.session.user,
-    restaurants: res.restaurants,
-    userRests: res.userRestaurants[0]
+    restaurants: res.rows
   });
 })
 
@@ -28,16 +27,23 @@ rests.post('/', notImplemented);
 rests.get('/new', notImplemented);
 
 // users restaurants seen
-rests.get('/my/seen', (req, res) => {
-  res.render('pages/restaurants-seen', { user: req.session.user })
+rests.get('/my/seen', db.showUserRests, (req, res) => {
+  res.render('pages/restaurants-seen', {
+    user: req.session.user,
+    data: res.rows
+  })
+  console.log(res.rows[0].visited);
+  console.log(res.rows[1]);
 })
 
 // user open restaurants
-rests.get('/my/unseen', db.showRestsUnseen, (req, res) => {
+rests.get('/my/unseen', db.showUserRests, (req, res) => {
   res.render('pages/restaurants-unseen', {
     user: req.session.user,
     data: res.rows
   })
+  console.log(res.rows[0]);
+  console.log(res.rows[1]);
 })
 
 
@@ -55,7 +61,9 @@ rests.put('/:id', db.updateUserRest, (req, res) => {
 })
 
 // remove a restaurant from the user's list
-rests.delete('/:id', notImplemented)
+rests.delete('/:id', db.deleteUserRest, (req, res) => {
+  res.status(303).redirect('./my/unseen');
+})
 
 
 module.exports = rests;

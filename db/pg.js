@@ -17,40 +17,19 @@ function showRestaurants(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT *
-      FROM restaurants
-      ORDER BY cuisine;`, function(err, results) {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.restaurants = results.rows;
-        next();
-      }); // end of query
-  }); // end of pg connect
-};  // end of show restaurants
-
-// get user restaurants array
-function getUserRestaurants(req, res, next) {
-  pg.connect(config, (err, client, done) => {
-    if (err) {
-      done();
-      console.log(err);
-      res.status(500).json({success: false, data: err});
-    }
-    // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT j.user_id, array_agg(j.rest_id) as rests
-      FROM rests_users_join AS j
-      WHERE j.user_id = ${req.session.user.user_id}
-      GROUP BY j.user_id;`, (err, results) => {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.userRestaurants = results.rows;
-        next();
-      }); // end of query
+    // render the list of restaurants not already in the user's list
+    var query = client.query(`SELECT r.*
+      FROM restaurants r
+      WHERE NOT EXISTS
+        (SELECT j.* FROM rests_users_join j
+         WHERE j.user_id = $1 AND r.rest_id = j.rest_id);`, [req.session.user.user_id], function(err, results) {
+          done();
+          if (err) {
+            return console.error('Error with query', err);
+          }
+          res.rows = results.rows;
+          next();
+        }); // end of query
   }); // end of pg connect
 };  // end of show restaurants
 
@@ -76,31 +55,6 @@ function addUserRestaurant(req, res, next) {
   }); // end of pg connect
 } // end of add user restaurants
 
-// function to show the user's unfrequented restaurants
-function showRestsUnseen(req, res, next) {
-  pg.connect(config, (err, client, done) => {
-    if (err) {
-      done();
-      console.log(err);
-      res.status(500).json({success: false, data: err});
-    }
-    // render the list of restaurants that the user hasn't already tagged
-    var query = client.query(`SELECT r.*
-      FROM restaurants as r
-      LEFT JOIN rests_users_join AS j
-      ON r.rest_id = j.rest_id
-      WHERE j.user_id = ${req.session.user.user_id} AND j.visited = FALSE
-      ORDER BY cuisine;`, function(err, results) {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.rows = results.rows;
-        next();
-      }); // end of query
-  }); // end of pg connect
-} // end of showRestsUnseen
-
 // function to update a user restaurant from unseen to seen
 function updateUserRest(req, res, next) {
   pg.connect(config, function(err, client, done) {
@@ -109,7 +63,7 @@ function updateUserRest(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants that the user hasn't already tagged
+    // change the visited status on the restaurant to TRUE
     var query = client.query(`UPDATE rests_users_join
       SET visited=TRUE
       WHERE rest_id=$1 AND user_id=$2;`, [req.params.id, req.session.user.user_id], (err, results) => {
@@ -122,11 +76,60 @@ function updateUserRest(req, res, next) {
   }); // end of pg connect
 } // end of updateUserRest
 
+// function to remove a restaurant from the user's list
+function deleteUserRest(req, res, next) {
+  pg.connect(config, function(err, client, done) {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // remove the specified user-restaurant combination from the join table
+    var query = client.query(`DELETE from rests_users_join
+      WHERE rest_id=$1 AND user_id=$2;`, [req.params.id, req.session.user.user_id], (err, results) => {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        next();
+      }); // end of query
+  }); // end of pg connect
+} // end of deleteUserRest
+
+// function to show the user's restaurants
+function showUserRests(req, res, next) {
+  pg.connect(config, (err, client, done) => {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    // show the list of restaurants for the user where the visited attribute is false
+    var query = client.query(`SELECT r.*, j.visited
+      FROM restaurants as r
+      LEFT JOIN rests_users_join AS j
+      ON r.rest_id = j.rest_id
+      WHERE j.user_id = $1
+      ORDER BY cuisine;`, [req.session.user.user_id], function(err, results) {
+        done();
+        if (err) {
+          return console.error('Error with query', err);
+        }
+        res.rows = results.rows;
+        next();
+      }); // end of query
+  }); // end of pg connect
+} // end of showRestsUnseen
+
+// function to show the restaurants a user has been to
+function showRestsSeen(req, res, next) {
+
+}
+
 function loginUser(req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
 
-  // find user by email entered at log in
   pg.connect(config, function(err, client, done) {
     // Handle connection errors
     if(err) {
@@ -135,7 +138,8 @@ function loginUser(req, res, next) {
       res.status(500).json({ success: false, data: err});
     }
 
-    var query = client.query("SELECT * FROM users WHERE email LIKE ($1);",
+    // find user by email entered at log in
+    var query = client.query('SELECT * FROM users WHERE email LIKE ($1);',
       [email], function(err, result) {
         done()
         if(err) {
@@ -186,7 +190,7 @@ function createUser(req, res, next) {
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
 module.exports.showRestaurants = showRestaurants;
-module.exports.getUserRestaurants = getUserRestaurants;
-module.exports.showRestsUnseen = showRestsUnseen;
+module.exports.showUserRests = showUserRests;
 module.exports.addUserRestaurant = addUserRestaurant;
 module.exports.updateUserRest = updateUserRest;
+module.exports.deleteUserRest = deleteUserRest;

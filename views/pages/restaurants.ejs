@@ -19,18 +19,15 @@
             <th>Website</th>
           </tr>
           <% restaurants.forEach(restaurant => { %>
-            <% var userRestArr = userRests.rests.sort(); %>
-            <% if (!userRestArr.indexOf(restaurant.rest_id+1)) { %>
-              <tr>
-                <%- include _show %>
-                <td>
-                  <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
-                  <label for="submit"></label>
-                  <button id="submit" type="submit">Add to my list</button>
-                  </form>
-                </td>
-              </tr>
-            <% }; %>
+            <tr>
+              <%- include _show %>
+              <td>
+                <form action="/restaurants/<%= restaurant.rest_id %>" method="POST">
+                <label for="submit"></label>
+                <button id="submit" type="submit">Add to my list</button>
+                </form>
+              </td>
+            </tr>
           <% }); %>
         </table>
       <% } %>

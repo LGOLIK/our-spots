@@ -8,7 +8,22 @@
       <%- include ../partials/nav %>
     </nav>
     <% if (user) {%>
-      <h3><%= user.first %>'s places visited</h3>
+      <h2>Where I Been!</h2>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Cuisine</th>
+          <th>Neighborhood</th>
+          <th>Website</th>
+        </tr>
+        <% data.forEach(restaurant => { %>
+          <% if (restaurant.visited) {  %>
+            <tr>
+              <%- include _show %>
+            </tr>
+          <% } %>
+        <% }); %>
+      </table>
     <% } %>
   </body>
 </html>

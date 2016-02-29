@@ -1,26 +1,24 @@
 -- Restaurants query
 
+-- this is one query that works for everything - returns only the restaurants not in a users list
+SELECT r.*
+FROM restaurants r
+WHERE NOT EXISTS
+  (SELECT j.* FROM rests_users_join j
+   WHERE j.user_id = 3 AND r.rest_id = j.rest_id);
+
+
+-- no longer working
 -- first select all restaurants
-SELECT *
-FROM restaurants
-ORDER BY cuisine;
-
--- then select an array of restaurants associated with the logged in user
-SELECT j.user_id, array_agg(j.rest_id) as rests
-FROM rests_users_join AS j
-WHERE j.user_id = 2
-GROUP BY j.user_id;
-
--- in the restaurants ejs, only the restaurants that are not in the user array render.
-
--- SELECT r.rest_id, r.name, r.neighborhood, r.cuisine, j.user_id, sum(j.rest_id)
--- FROM restaurants AS r
--- FULL OUTER JOIN rests_users_join AS j
--- ON r.rest_id = j.rest_id
--- WHERE j.user_id = 2 or j.user_id IS NULL
--- GROUP BY r.rest_id, r.name, r.neighborhood, r.cuisine, j.user_id;
-
-
+-- SELECT *
+-- FROM restaurants
+-- ORDER BY cuisine;
+--
+-- -- then select an array of restaurants associated with the logged in user
+-- SELECT j.user_id, array_agg(j.rest_id) as rests
+-- FROM rests_users_join AS j
+-- WHERE j.user_id = 2
+-- GROUP BY j.user_id;
 
 -- open restaurants query
 SELECT r.*
