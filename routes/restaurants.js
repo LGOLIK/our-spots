@@ -32,8 +32,6 @@ rests.get('/my/seen', db.showUserRests, (req, res) => {
     user: req.session.user,
     data: res.rows
   })
-  console.log(res.rows[0].visited);
-  console.log(res.rows[1]);
 })
 
 // user open restaurants
@@ -42,8 +40,6 @@ rests.get('/my/unseen', db.showUserRests, (req, res) => {
     user: req.session.user,
     data: res.rows
   })
-  console.log(res.rows[0]);
-  console.log(res.rows[1]);
 })
 
 
