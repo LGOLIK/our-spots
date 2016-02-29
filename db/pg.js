@@ -109,7 +109,7 @@ function showUserRests(req, res, next) {
       FROM restaurants as r
       LEFT JOIN rests_users_join AS j
       ON r.rest_id = j.rest_id
-      WHERE j.user_id = $1 AND j.visited = FALSE
+      WHERE j.user_id = $1
       ORDER BY cuisine;`, [req.session.user.user_id], function(err, results) {
         done();
         if (err) {

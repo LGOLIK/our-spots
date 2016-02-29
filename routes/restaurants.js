@@ -27,8 +27,13 @@ rests.post('/', notImplemented);
 rests.get('/new', notImplemented);
 
 // users restaurants seen
-rests.get('/my/seen', (req, res) => {
-  res.render('pages/restaurants-seen', { user: req.session.user })
+rests.get('/my/seen', db.showUserRests, (req, res) => {
+  res.render('pages/restaurants-seen', {
+    user: req.session.user,
+    data: res.rows
+  })
+  console.log(res.rows[0].visited);
+  console.log(res.rows[1]);
 })
 
 // user open restaurants
@@ -38,6 +43,7 @@ rests.get('/my/unseen', db.showUserRests, (req, res) => {
     data: res.rows
   })
   console.log(res.rows[0]);
+  console.log(res.rows[1]);
 })
 
 

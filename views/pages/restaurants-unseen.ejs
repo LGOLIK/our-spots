@@ -17,7 +17,7 @@
           <th>Website</th>
         </tr>
         <% data.forEach(restaurant => { %>
-          <% if (!data.visited) {  %>
+          <% if (!restaurant.visited) {  %>
             <tr>
               <%- include _show %>
               <td><form class="" action="/restaurants/<%= restaurant.rest_id %>?_method=PUT" method="POST">
