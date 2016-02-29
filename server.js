@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var pg = require('pg');
 // config path
-if (process.env.NODE_ENV === 'production') {
+if (process.NODE_ENV === 'production') {
   var config = process.env.DATABASE_URL;
 } else {
   var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
@@ -46,7 +46,7 @@ app.use(session({
     conString : config,
     tableName : 'session'
   }),
-  secret: process.env.SECRET,
+  secret: 'supersecret',
   resave: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
