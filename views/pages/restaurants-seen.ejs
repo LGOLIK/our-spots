@@ -6,22 +6,33 @@
   <body>
     <%- include ../partials/nav %>
     <% if (user) {%>
-      <h2>Where I Been!</h2>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Cuisine</th>
-          <th>Neighborhood</th>
-          <th>Website</th>
-        </tr>
-        <% data.forEach(restaurant => { %>
-          <% if (restaurant.visited) {  %>
-            <tr>
-              <%- include _show %>
-            </tr>
-          <% } %>
-        <% }); %>
-      </table>
+      <div class="jumbotron">
+        <h2>Where I Been!</h2>
+        <p>Here's the list of places I've been to.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Cuisine</th>
+                <th>Neighborhood</th>
+                <th>Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.forEach(restaurant => { %>
+                <% if (restaurant.visited) {  %>
+                  <tr>
+                    <%- include _show %>
+                  </tr>
+                <% } %>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     <% } %>
     <%- include ../partials/footer %>
   </body>
