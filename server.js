@@ -8,8 +8,12 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var pg = require('pg');
-var connectionString = "postgres://" + process.env.DB_USER + ":" +
-  process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+// config path
+if (process.env.NODE_ENV === 'production') {
+  var config = process.env.DATABASE_URL;
+} else {
+  var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+}
 var session = require('express-session');
 var pgSession = require('connect-pg-simple')(session);
 
@@ -39,7 +43,7 @@ app.use(express.static(path.join(__dirname, './public/') ) );
 app.use(session({
   store: new pgSession({
     pg : pg,
-    conString : connectionString,
+    conString : config,
     tableName : 'session'
   }),
   secret: process.env.SECRET,
