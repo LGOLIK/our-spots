@@ -1,6 +1,6 @@
 'use strict';
 
-var dotenv = require('dotenv');
+require('dotenv').config();
 
 var pg = require('pg');
 var express = require('express');
@@ -10,11 +10,12 @@ var salt = bcrypt.genSaltSync(10);
 var session = require('express-session');
 
 // config path
-if (process.NODE_ENV === 'production') {
-  var config = process.env.DATABASE_URL;
-} else {
-  var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
-}
+var config = process.env.DATABASE_URL;
+// if (process.env.NODE_ENV === 'production') {
+//   var config = process.env.DATABASE_URL;
+// } else {
+//   var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+// }
 
 // function to show all restaurants
 function showRestaurants(req, res, next) {

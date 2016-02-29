@@ -1,6 +1,6 @@
 'use strict';
 
-var dotenv = require('dotenv');
+require('dotenv').config();
 
 var path = require('path');
 var express = require('express');
@@ -9,11 +9,12 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var pg = require('pg');
 // config path
-if (process.NODE_ENV === 'production') {
-  var config = process.env.DATABASE_URL;
-} else {
-  var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
-}
+var config = process.env.DATABASE_URL;
+// if (process.env.NODE_ENV === 'production') {
+//   var config = process.env.DATABASE_URL;
+// } else {
+//   var config = "postgres://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
+// }
 var session = require('express-session');
 var pgSession = require('connect-pg-simple')(session);
 
