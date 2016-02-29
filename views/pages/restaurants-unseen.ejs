@@ -4,9 +4,7 @@
     <%- include ../partials/head %>
   </head>
   <body>
-    <nav>
-      <%- include ../partials/nav %>
-    </nav>
+    <%- include ../partials/nav %>
     <% if (user) {%>
       <h2>New Spots to Go To!</h2>
       <table>
@@ -33,5 +31,6 @@
         <% }); %>
       </table>
     <% } %>
+    <%- include ../partials/footer %>
   </body>
 </html>
