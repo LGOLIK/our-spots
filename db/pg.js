@@ -17,40 +17,19 @@ function showRestaurants(req, res, next) {
       console.log(err);
       res.status(500).json({success: false, data: err});
     }
-    // render the list of restaurants
-    var query = client.query(`SELECT *
-      FROM restaurants
-      ORDER BY cuisine;`, function(err, results) {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.restaurants = results.rows;
-        next();
-      }); // end of query
-  }); // end of pg connect
-};  // end of show restaurants
-
-// get user restaurants array
-function getUserRestaurants(req, res, next) {
-  pg.connect(config, (err, client, done) => {
-    if (err) {
-      done();
-      console.log(err);
-      res.status(500).json({success: false, data: err});
-    }
-    // returns a table of user_id and an array of rest_id's that they each are associated with
-    var query = client.query(`SELECT j.user_id, array_agg(j.rest_id) as rests
-      FROM rests_users_join AS j
-      WHERE j.user_id = $1
-      GROUP BY j.user_id;`, [req.session.user.user_id], (err, results) => {
-        done();
-        if (err) {
-          return console.error('Error with query', err);
-        }
-        res.userRestaurants = results.rows;
-        next();
-      }); // end of query
+    // render the list of restaurants not already in the user's list
+    var query = client.query(`SELECT r.*
+      FROM restaurants r
+      WHERE NOT EXISTS
+        (SELECT j.* FROM rests_users_join j
+         WHERE j.user_id = $1 AND r.rest_id = j.rest_id);`, [req.session.user.user_id], function(err, results) {
+          done();
+          if (err) {
+            return console.error('Error with query', err);
+          }
+          res.rows = results.rows;
+          next();
+        }); // end of query
   }); // end of pg connect
 };  // end of show restaurants
 
@@ -206,7 +185,6 @@ function createUser(req, res, next) {
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
 module.exports.showRestaurants = showRestaurants;
-module.exports.getUserRestaurants = getUserRestaurants;
 module.exports.showRestsUnseen = showRestsUnseen;
 module.exports.addUserRestaurant = addUserRestaurant;
 module.exports.updateUserRest = updateUserRest;

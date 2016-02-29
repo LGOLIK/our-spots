@@ -13,15 +13,12 @@ var notImplemented = (req, res) => {
  this page renders with both the full list of restaurants,
  as well as an array of restaurants set to the user and
  shows the restaurants not in the user's list */
-rests.get('/', db.showRestaurants, db.getUserRestaurants, (req, res) => {
+rests.get('/', db.showRestaurants, (req, res) => {
   res.render('pages/restaurants', {
     user: req.session.user,
-    restaurants: res.restaurants,
-    userRests: res.userRestaurants[0]
+    restaurants: res.rows
+    // userRests: res.userRestaurants[0]
   });
-  console.log('user: ' + req.session.user.user_id);
-  console.log('restaurants: ' + res.restaurants[0].name);
-  console.log('user restaurants: ');
 })
 
 // add a new restaurant to the communal list
