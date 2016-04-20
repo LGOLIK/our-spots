@@ -41,7 +41,6 @@ function addUserRestaurant(req, res, next) {
   pg.connect(config, (err, client, done) => {
     if (err) {
       done();
-      console.log(err);
       res.status(500).json({success: false, data: err});
     }
     // insert the rest id from the link, the user_id from the session, and FALSE for visited into the join table
