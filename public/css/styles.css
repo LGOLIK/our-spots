@@ -71,7 +71,7 @@ body {
   border-bottom-right-radius: 0;
   border-top-style: none;
   border-right-style: solid;
-  border-bottom-style: none;
+  border-bottom-style: solid;
   border-left-style: solid;
   border-color: #000;
 }

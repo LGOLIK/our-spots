@@ -24,7 +24,7 @@ function showRestaurants(req, res, next) {
     var query = client.query(`SELECT r.*
       FROM restaurants r
       WHERE NOT EXISTS
-        (SELECT j.* FROM rests_users_join j
+        (SELECT j.* FROM rests_users_join AS j
          WHERE j.user_id = $1 AND r.rest_id = j.rest_id);`, [req.session.user.user_id], function(err, results) {
           done();
           if (err) {
@@ -187,6 +187,8 @@ function createUser(req, res, next) {
     })
   }
 } // end of create user function
+
+
 
 // export it out
 module.exports.createUser = createUser;
