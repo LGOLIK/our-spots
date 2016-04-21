@@ -7,7 +7,7 @@ var db = require('./../db/pg');
 
 users.route('/')
   .post(db.createUser, (req, res) => {
-    res.redirect('/restaurants');
+    res.redirect('/users/login');
   })
 
 // render the register user page

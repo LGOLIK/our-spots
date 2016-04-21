@@ -5,17 +5,11 @@
   </head>
   <body>
     <div id="login" class="container">
-      <h1>Log in!</h1>
-      <form action="/users/login" method="post">
-        <div>
-          <label for="email">email</label>
-          <input type="email" name="email">
-        </div>
-        <div>
-          <label for="password">password</label>
-          <input type="password" name="password">
-        </div>
-        <input type="submit" value="Submit">
+      <form class="form-signin" action="/users/login" method="post">
+        <h1 class="form-signin-heading text-muted">Sign in</h1>
+        <input type="email" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="password" name="password" class="form-control" placeholder="Password" required="">
+        <input class="btn btn-lg btn-default btn-block" type="submit" value="Sign in">
       </form>
     </div>
   </body>

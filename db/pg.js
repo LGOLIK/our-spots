@@ -24,7 +24,7 @@ function showRestaurants(req, res, next) {
     var query = client.query(`SELECT r.*
       FROM restaurants r
       WHERE NOT EXISTS
-        (SELECT j.* FROM rests_users_join j
+        (SELECT j.* FROM rests_users_join AS j
          WHERE j.user_id = $1 AND r.rest_id = j.rest_id);`, [req.session.user.user_id], function(err, results) {
           done();
           if (err) {
@@ -41,7 +41,6 @@ function addUserRestaurant(req, res, next) {
   pg.connect(config, (err, client, done) => {
     if (err) {
       done();
-      console.log(err);
       res.status(500).json({success: false, data: err});
     }
     // insert the rest id from the link, the user_id from the session, and FALSE for visited into the join table
@@ -188,6 +187,8 @@ function createUser(req, res, next) {
     })
   }
 } // end of create user function
+
+
 
 // export it out
 module.exports.createUser = createUser;

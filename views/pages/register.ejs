@@ -5,13 +5,19 @@
   </head>
   <body>
     <div class="container">
-      <h1>Sign up!</h1>
-        <form action="/users" method="post">
-          <div>
+        <form class="form-signin" action="/users" method="post">
+          <h1 class="form-signin-heading text-muted">Create your Account</h1>
+          <input type="email" name="email" class="form-control" placeholder="Email address">
+          <input type="text" name="first" class="form-control" placeholder="First name">
+          <input type="text" name="last" class="form-control" placeholder="Last name">
+          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input class="btn btn-lg btn-default btn-block" type="submit" value="Sign up">
+
+          <!-- <div>
             <label for="first">first</label>
             <input type="text" name="first">
-          </div>
-          <div>
+          </div> -->
+          <!-- <div>
             <label for="last">last</label>
             <input type="text" name="last">
           </div>
@@ -25,7 +31,7 @@
             <input type="password" name="password">
           </div>
 
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit"> -->
         </form>
     </div>
     <%- include ../partials/footer %>
