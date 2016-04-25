@@ -24,7 +24,11 @@ rests.get('/', db.showRestaurants, (req, res) => {
 rests.post('/', notImplemented);
 
 // new restaurant form
-rests.get('/new', notImplemented);
+rests.get('/new', (req, res) => {
+  res.render('pages/new', {
+    user: req.session.user
+  })
+});
 
 // users restaurants seen
 rests.get('/my/seen', db.showUserRests, (req, res) => {
