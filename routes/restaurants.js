@@ -1,11 +1,20 @@
 'use strict';
 
-var express = require('express');
-var rests = express.Router();
-var users = require('./users');
-var db = require('../db/pg');
+const express = require('express');
+const rests = express.Router();
+const users = require('./users');
+const db = require('../db/pg');
+const request = require('request');
+const Yelp = require('yelp');
 
-var notImplemented = (req, res) => {
+const yelp = new Yelp({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  token: process.env.TOKEN,
+  token_secret: process.env.TOKEN_SECRET
+});
+
+const notImplemented = (req, res) => {
   res.send(req.method + ' is not implemented');
 };
 
@@ -20,10 +29,23 @@ rests.get('/', db.showRestaurants, (req, res) => {
   });
 })
 
+// Yelp API results
+rests.get('/searchresults', (req, res) => {
+  return yelp.search({
+    term: 'gramercy tavern',
+    location: 'New York, NY',
+    category_filter: 'restaurants,bars'
+  }).then((data) => {
+    res.send(data);
+  }).catch((err) => {
+    console.error(err);
+  });
+});
+
 // add a new restaurant to the communal list
 rests.post('/', notImplemented);
 
-// new restaurant form
+// new restaurant form - clicking on search brings up the yelp results
 rests.get('/new', (req, res) => {
   res.render('pages/new', {
     user: req.session.user

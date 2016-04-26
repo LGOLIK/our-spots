@@ -8,8 +8,20 @@
       <%- include ../partials/nav %>
       <% if (user) {%>
         <div class="jumbotron">
-          <h2>Add more restaurants</h2>
+          <h2>Add restaurants</h2>
           <p>Add more restaurants to the community list.</p>
+        </div>
+	      <div class="row">
+          <form class="form-search" action="" method="get">
+            <input type="text" name="name" class="form-control" placeholder="name of restaurant" autofocus="">
+            <input type="text" name="neighborhood" class="form-control" placeholder="neighborhood">
+            <input type="text" name="cuisine" class="form-control" placeholder="cuisine">
+            <select class="form-control" name="city">
+              <option value="New York">New York, NY</option>
+            </select>
+            <br>
+            <input class="btn btn-lg btn-default btn-block" type="submit" value="Search Yelp">
+          </form>
         </div>
       <% } %>
     </div>
