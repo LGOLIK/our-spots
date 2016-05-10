@@ -23,10 +23,14 @@ $( () => {
 
     // category
     if ($category) {
-      searchTerms.category = $category;
+      searchTerms.category = `restaurants, ${$category}`;
     }
 
-    $.get( '/restaurants/new', searchTerms );
+    // get the search results
+    $.get( '/restaurants/searchresults', searchTerms )
+      .done( (data) => {
+        console.log(data.businesses);
+      });
   })
 
 

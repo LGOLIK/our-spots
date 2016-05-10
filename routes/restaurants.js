@@ -31,11 +31,8 @@ rests.get('/', db.showRestaurants, (req, res) => {
 
 // Yelp API results
 rests.get('/searchresults', (req, res) => {
-  return yelp.search({
-    term: 'gramercy tavern',
-    location: 'New York, NY',
-    category_filter: 'restaurants,bars'
-  }).then((data) => {
+  const queryObj = req.query;
+  return yelp.search(queryObj).then((data) => {
     res.send(data);
   }).catch((err) => {
     console.error(err);
