@@ -10,7 +10,7 @@ CREATE TABLE restaurants (
   state CHAR(2),
   cuisine VARCHAR(255),
   website VARCHAR(255),
-  yelp VARCHAR(255)
+  img_url VARCHAR(255)
 );
 
 CREATE TABLE users (
